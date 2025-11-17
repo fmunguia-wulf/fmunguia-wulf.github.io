@@ -369,7 +369,6 @@
         let nextId = 1;
         let maxZIndex = 100;
         let draggedWindow = null;
-        let dragOffset = { x: 0, y: 0 };
 
         const tabs = [
             { id: 'about', label: 'about', emoji: '👋' },
@@ -508,6 +507,11 @@
         }
 
         function startDrag(e) {
+            // Don't drag if clicking on close button
+            if (e.target.classList.contains('close-btn') || e.target.closest('.close-btn')) {
+                return;
+            }
+
             const windowId = parseInt(e.currentTarget.dataset.windowId);
             const windowEl = document.getElementById(`window-${windowId}`);
             const rect = windowEl.getBoundingClientRect();
@@ -520,6 +524,8 @@
             };
 
             e.currentTarget.classList.add('dragging');
+            e.preventDefault(); // Prevent text selection
+            
             document.addEventListener('mousemove', drag);
             document.addEventListener('mouseup', stopDrag);
         }
@@ -533,10 +539,10 @@
             draggedWindow.element.style.left = newX + 'px';
             draggedWindow.element.style.top = newY + 'px';
 
-            const window = windows.find(w => w.id === draggedWindow.id);
-            if (window) {
-                window.x = newX;
-                window.y = newY;
+            const windowObj = windows.find(w => w.id === draggedWindow.id);
+            if (windowObj) {
+                windowObj.x = newX;
+                windowObj.y = newY;
             }
         }
 
