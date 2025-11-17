@@ -14,49 +14,52 @@
         body {
             font-family: 'Courier New', monospace;
             overflow: hidden;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: background 0.5s ease;
+        }
+
+        body.day-mode {
+            background: #ffd6e8;
+        }
+
+        body.night-mode {
+            background: #2a2438;
+        }
+
+        body {
+            background: #ffd6e8;
         }
 
         .portfolio {
             width: 100vw;
             height: 100vh;
             position: relative;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(162, 155, 254, 0.3), transparent 50%),
-                linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
         }
 
-        .star {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: twinkle 3s infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        .mascot {
+        /* Day/Night toggle button */
+        .theme-toggle {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 120px;
-            height: 120px;
-            background: rgba(255, 255, 255, 0.1);
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            z-index: 1;
+            font-size: 24px;
+            z-index: 10001;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.4);
         }
 
         .title-card {
@@ -64,28 +67,104 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            text-align: center;
-            color: white;
+            text-align: left;
             z-index: 1;
             transition: opacity 0.3s;
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            width: 650px;
+            min-height: 600px;
+            overflow: hidden;
         }
 
         .title-card.hidden {
             opacity: 0;
             pointer-events: none;
+            display: none;
+        }
+
+        .terminal-header {
+            background: rgba(40, 40, 40, 0.95);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .terminal-button.red {
+            background: #ff5f56;
+            border: 1px solid #e0443e;
+        }
+
+        .terminal-button.yellow {
+            background: #ffbd2e;
+            border: 1px solid #dea123;
+        }
+
+        .terminal-button.green {
+            background: #27c93f;
+            border: 1px solid #1aab29;
+        }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            color: #a0a0a0;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        .terminal-content {
+            padding: 50px 60px;
         }
 
         .title-card h1 {
-            font-size: 72px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+            font-size: 64px;
+            margin-bottom: 25px;
             font-weight: bold;
+            color: #22c55e;
+            font-family: 'Courier New', monospace;
+        }
+
+        .title-card h1::before {
+            content: '$ ';
+            color: #22c55e;
         }
 
         .title-card p {
             font-size: 18px;
-            opacity: 0.9;
-            text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+            color: #a0a0a0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+        }
+
+        .terminal-prompt {
+            color: #22c55e;
+            margin-bottom: 10px;
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #22c55e;
+            animation: blink 1s infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
         }
 
         .nav-tabs {
@@ -96,20 +175,21 @@
             display: flex;
             gap: 10px;
             z-index: 10000;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.3);
             padding: 10px 15px;
             border-radius: 30px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .tab {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.5);
             border: none;
             padding: 10px 20px;
             border-radius: 20px;
             cursor: pointer;
-            color: white;
+            color: #333;
             font-family: 'Courier New', monospace;
             font-size: 14px;
             font-weight: bold;
@@ -118,25 +198,50 @@
         }
 
         .tab:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.8);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
         }
 
         .window {
             position: absolute;
-            background: rgba(30, 30, 30, 0.95);
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             width: 500px;
             max-height: 600px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            resize: both;
+            min-width: 400px;
+            min-height: 300px;
+        }
+
+        .window-resize-handle {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            cursor: nwse-resize;
+            z-index: 10;
+        }
+
+        .window-resize-handle::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 0 12px 12px;
+            border-color: transparent transparent rgba(255, 255, 255, 0.3) transparent;
         }
 
         .window-header {
-            background: rgba(50, 50, 50, 0.9);
-            padding: 12px 15px;
+            padding: 10px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -149,36 +254,90 @@
             cursor: grabbing;
         }
 
-        .window-title {
-            color: #22c55e;
-            font-weight: bold;
-            font-size: 14px;
+        /* Different terminal themes */
+        .window-header.theme-ocean {
+            background: linear-gradient(135deg, #224488 0%, #1a3a5c 100%);
         }
 
-        .window-title::before {
-            content: '> ';
-            color: #22c55e;
+        .window-header.theme-grass {
+            background: linear-gradient(135deg, #2d5016 0%, #1f3a0f 100%);
         }
 
-        .close-btn {
-            background: rgba(239, 68, 68, 0.8);
-            border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            cursor: pointer;
+        .window-header.theme-novel {
+            background: linear-gradient(135deg, #4d4d4d 0%, #2d2d2d 100%);
+        }
+
+        .window-header.theme-pro {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+        }
+
+        .window-header.theme-red-sands {
+            background: linear-gradient(135deg, #6d3331 0%, #4a2422 100%);
+        }
+
+        .window-header.theme-silver {
+            background: linear-gradient(135deg, #c0c0c0 0%, #a0a0a0 100%);
+        }
+
+        .terminal-buttons {
             display: flex;
+            gap: 8px;
             align-items: center;
-            justify-content: center;
-            color: white;
-            transition: all 0.2s;
-            font-size: 18px;
-            line-height: 1;
         }
 
-        .close-btn:hover {
-            background: rgba(239, 68, 68, 1);
-            transform: scale(1.1);
+        .terminal-window-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .terminal-window-button.red {
+            background: #ff5f56;
+            border: 1px solid #e0443e;
+            cursor: pointer;
+        }
+
+        .terminal-window-button.red:hover {
+            background: #ff3b30;
+        }
+
+        .terminal-window-button.yellow {
+            background: #ffbd2e;
+            border: 1px solid #dea123;
+        }
+
+        .terminal-window-button.green {
+            background: #27c93f;
+            border: 1px solid #1aab29;
+        }
+
+        .window-title {
+            color: #fff;
+            font-weight: normal;
+            font-size: 12px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            flex: 1;
+            text-align: center;
+            margin: 0 20px;
+        }
+
+        .window-header.theme-silver .window-title {
+            color: #333;
+            text-shadow: none;
+        }
+
+        .window-close-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: transparent;
+            transition: all 0.2s;
+            font-size: 14px;
+            line-height: 1;
+            font-weight: bold;
+            position: absolute;
+            right: 15px;
         }
 
         .window-content {
@@ -186,8 +345,9 @@
             color: #e0e0e0;
             font-size: 14px;
             line-height: 1.8;
-            max-height: 500px;
+            height: calc(100% - 45px);
             overflow-y: auto;
+            background: rgba(30, 30, 30, 0.95);
         }
 
         .window-content::-webkit-scrollbar {
@@ -195,7 +355,7 @@
         }
 
         .window-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.2);
         }
 
         .window-content::-webkit-scrollbar-thumb {
@@ -203,12 +363,16 @@
             border-radius: 4px;
         }
 
+        .window-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         .terminal-text {
             font-family: 'Courier New', monospace;
         }
 
         .prompt {
-            color: #22c55e;
+            color: #f59e0b;
             font-weight: bold;
             margin-bottom: 8px;
         }
@@ -233,7 +397,7 @@
 
         .project {
             padding-left: 10px;
-            border-left: 2px solid #22c55e;
+            border-left: 3px solid #22c55e;
             margin-bottom: 15px;
         }
 
@@ -256,28 +420,66 @@
         }
 
         .email-btn {
-            background: #22c55e;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
             border: none;
             padding: 10px 20px;
-            border-radius: 5px;
-            color: black;
+            border-radius: 8px;
+            color: white;
             font-family: 'Courier New', monospace;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
             margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
         .email-btn:hover {
-            background: #16a34a;
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
         }
     </style>
 </head>
 <body>
-    <div id="app" class="portfolio"></div>
+    <div id="app" class="portfolio">
+        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle day/night mode">
+            <span id="themeIcon">☀️</span>
+        </div>
+    </div>
 
     <script>
+        // Theme management
+        let isDarkMode = false;
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (isDarkMode) {
+                body.classList.remove('day-mode');
+                body.classList.add('night-mode');
+                themeIcon.textContent = '🌙';
+            } else {
+                body.classList.remove('night-mode');
+                body.classList.add('day-mode');
+                themeIcon.textContent = '☀️';
+            }
+            
+            // Save preference
+            localStorage.setItem('theme', isDarkMode ? 'night' : 'day');
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'night') {
+                isDarkMode = false; // Will be toggled to true
+                toggleTheme();
+            } else {
+                document.body.classList.add('day-mode');
+            }
+        }
+
         // Content for each window
         const content = {
             about: `
@@ -371,34 +573,204 @@
         let draggedWindow = null;
 
         const tabs = [
-            { id: 'about', label: 'about', emoji: '👋' },
-            { id: 'links', label: 'links', emoji: '🔗' },
-            { id: 'work', label: 'work', emoji: '💼' },
-            { id: 'faq', label: 'faq', emoji: '❓' },
-            { id: 'contact', label: 'contact', emoji: '📧' },
+            { id: 'about', label: 'about', theme: 'ocean', title: 'about — bash — 80×24' },
+            { id: 'links', label: 'links', theme: 'grass', title: 'links — zsh — 80×24' },
+            { id: 'work', label: 'work', theme: 'novel', title: 'work — bash — 80×24' },
+            { id: 'faq', label: 'faq', theme: 'red-sands', title: 'faq — bash — 80×24' },
+            { id: 'contact', label: 'contact', theme: 'pro', title: 'contact — bash — 80×24' },
         ];
-
-        function createStars() {
-            const app = document.getElementById('app');
-            for (let i = 0; i < 50; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 3 + 's';
-                app.appendChild(star);
-            }
-        }
 
         function createTitleCard() {
             const titleCard = document.createElement('div');
             titleCard.className = 'title-card';
             titleCard.id = 'titleCard';
             titleCard.innerHTML = `
-                <h1>hi! i'm [name]</h1>
-                <p>developer, designer, creator</p>
+                <div class="terminal-header">
+                    <span class="terminal-button red"></span>
+                    <span class="terminal-button yellow"></span>
+                    <span class="terminal-button green"></span>
+                    <span class="terminal-title">terminal — bash — 80×24</span>
+                </div>
+                <div class="terminal-content">
+                    <h1>whoami</h1>
+                    <p class="terminal-prompt">Hi! I'm [name]</p>
+                    <p>developer, designer, creator</p>
+                    <br>
+                    <p class="terminal-prompt">$ ls skills/</p>
+                    <p>web-dev  design  creative-coding</p>
+                    <br>
+                    <p>Type a command: about, links, work, faq, contact</p>
+                    <div style="display: flex; align-items: center; margin-top: 10px;">
+                        <span style="color: #22c55e;">$ </span>
+                        <input type="text" id="terminalInput" style="
+                            background: transparent;
+                            border: none;
+                            outline: none;
+                            color: #e0e0e0;
+                            font-family: 'Courier New', monospace;
+                            font-size: 16px;
+                            flex: 1;
+                            margin-left: 5px;
+                            caret-color: #22c55e;
+                        " placeholder="" autofocus>
+                    </div>
+                </div>
             `;
             document.getElementById('app').appendChild(titleCard);
+            
+            // Add enter key listener
+            const input = document.getElementById('terminalInput');
+            if (input) {
+                input.addEventListener('keypress', handleTerminalCommand);
+                // Focus input when title card is visible
+                setTimeout(() => input.focus(), 100);
+            }
+        }
+
+        function handleTerminalCommand(e) {
+            if (e.key === 'Enter') {
+                const command = e.target.value.trim();
+                const originalCommand = command;
+                e.target.value = '';
+                
+                // Check for print() function - improved regex
+                const printMatch = command.match(/^print\(["'](.*)["']\)$/);
+                if (printMatch) {
+                    const textToPrint = printMatch[1];
+                    const content = e.target.parentElement.parentElement;
+                    
+                    // Show the command
+                    const cmdEcho = document.createElement('p');
+                    cmdEcho.style.color = '#22c55e';
+                    cmdEcho.textContent = '$ ' + originalCommand;
+                    content.insertBefore(cmdEcho, e.target.parentElement);
+                    
+                    // Print the output
+                    const output = document.createElement('p');
+                    output.style.color = '#e0e0e0';
+                    output.style.marginBottom = '10px';
+                    
+                    // If short text, make it ASCII art style
+                    if (textToPrint.length <= 15) {
+                        output.innerHTML = generateASCIIArt(textToPrint);
+                        output.style.fontWeight = 'bold';
+                        output.style.fontSize = '14px';
+                        output.style.lineHeight = '1.2';
+                    } else {
+                        output.textContent = textToPrint;
+                    }
+                    
+                    content.insertBefore(output, e.target.parentElement);
+                    
+                    // Scroll to bottom
+                    content.scrollTop = content.scrollHeight;
+                    return;
+                }
+                
+                // Check if command matches a tab
+                const validCommands = ['about', 'links', 'work', 'faq', 'contact'];
+                if (validCommands.includes(command.toLowerCase())) {
+                    openWindow(command.toLowerCase());
+                } else if (command.toLowerCase() === 'help') {
+                    // Show help message
+                    const content = e.target.parentElement.parentElement;
+                    const helpMsg = document.createElement('p');
+                    helpMsg.style.color = '#fbbf24';
+                    helpMsg.innerHTML = `Available commands:<br>
+                    - about, links, work, faq, contact<br>
+                    - print("your text") - Easter egg! 🎉<br>
+                    - help, clear`;
+                    content.insertBefore(helpMsg, e.target.parentElement);
+                    setTimeout(() => helpMsg.remove(), 5000);
+                } else if (command.toLowerCase() === 'clear') {
+                    // Clear the terminal but keep initial content
+                    const content = e.target.parentElement.parentElement;
+                    const allElements = Array.from(content.children);
+                    
+                    // Find the initial content (everything before the input line)
+                    const inputContainer = e.target.parentElement;
+                    const inputIndex = allElements.indexOf(inputContainer);
+                    
+                    // Remove only dynamically added messages (after initial content, before input)
+                    allElements.forEach((element, index) => {
+                        // Keep h1, initial paragraphs with br tags, and the input line
+                        const isInitialContent = element.tagName === 'H1' || 
+                                                element.tagName === 'BR' ||
+                                                (element.tagName === 'P' && !element.style.color) ||
+                                                element === inputContainer;
+                        
+                        // Remove dynamically added content (has inline styles)
+                        if (!isInitialContent && element.style && element.style.color && index < inputIndex) {
+                            element.remove();
+                        }
+                    });
+                } else if (command !== '') {
+                    // Command not found
+                    const content = e.target.parentElement.parentElement;
+                    const errorMsg = document.createElement('p');
+                    errorMsg.style.color = '#ef4444';
+                    errorMsg.textContent = `command not found: ${command}`;
+                    content.insertBefore(errorMsg, e.target.parentElement);
+                    setTimeout(() => errorMsg.remove(), 3000);
+                }
+            }
+        }
+
+        function generateASCIIArt(text) {
+            // Simple ASCII art generator for short text
+            const asciiMap = {
+                'a': ['  ▄▀▄  ', ' █▀█  ', ' ▀ ▀  '],
+                'b': [' █▀▄  ', ' █▀▄  ', ' ▀▀   '],
+                'c': ['  ▄▀▀ ', ' █    ', '  ▀▀▀ '],
+                'd': [' █▀▄  ', ' █ █  ', ' ▀▀   '],
+                'e': [' █▀▀  ', ' █▀▀  ', ' ▀▀▀  '],
+                'f': [' █▀▀  ', ' █▀   ', ' ▀    '],
+                'g': ['  ▄▀▀ ', ' █ ▀█ ', '  ▀▀  '],
+                'h': [' █ █  ', ' █▀█  ', ' ▀ ▀  '],
+                'i': [' ▀█▀  ', '  █   ', ' ▀▀▀  '],
+                'j': ['   █  ', '   █  ', ' ▀▀   '],
+                'k': [' █ ▄▀ ', ' █▀▄  ', ' ▀ ▀  '],
+                'l': [' █    ', ' █    ', ' ▀▀▀  '],
+                'm': [' █▄ ▄█', ' █ ▀ █', ' ▀   ▀'],
+                'n': [' █▄ █ ', ' █ ▀█ ', ' ▀  ▀ '],
+                'o': ['  ▄▀▄ ', ' █ █  ', '  ▀▀  '],
+                'p': [' █▀▀  ', ' █▀   ', ' ▀    '],
+                'q': ['  ▄▀▄ ', ' █ █  ', '  ▀▀▄ '],
+                'r': [' █▀▄  ', ' █▀▄  ', ' ▀ ▀  '],
+                's': ['  ▄▀▀ ', '  ▀▄  ', ' ▀▀   '],
+                't': [' ▀█▀  ', '  █   ', '  ▀   '],
+                'u': [' █ █  ', ' █ █  ', '  ▀▀  '],
+                'v': [' █ █  ', ' █ █  ', '  ▀   '],
+                'w': [' █   █', ' █ ▄ █', '  ▀▀▀ '],
+                'x': [' █ █  ', '  ▀   ', ' █ █  '],
+                'y': [' █ █  ', '  █   ', '  ▀   '],
+                'z': [' ▀▀█  ', '  █   ', ' ▀▀▀  '],
+                ' ': ['      ', '      ', '      '],
+                '!': ['  █   ', '  █   ', '  ▀   '],
+                '?': [' ▀▀█  ', '   █  ', '  ▀   '],
+                '0': ['  ▄▀▄ ', ' █ █  ', '  ▀▀  '],
+                '1': ['  █   ', '  █   ', '  ▀   '],
+                '2': [' ▀▀█  ', '  █   ', ' ▀▀▀  '],
+                '3': [' ▀▀█  ', '  ▀█  ', ' ▀▀   '],
+                '4': [' █ █  ', '  ▀█  ', '   ▀  '],
+                '5': [' █▀▀  ', '  ▀█  ', ' ▀▀   '],
+                '6': ['  ▄▀  ', ' █▀▄  ', '  ▀▀  '],
+                '7': [' ▀▀█  ', '   █  ', '   ▀  '],
+                '8': ['  ▄▀▄ ', '  ▀▄  ', '  ▀▀  '],
+                '9': ['  ▄▀▄ ', '   ▀█ ', '  ▀▀  '],
+            };
+
+            const lines = ['', '', ''];
+            const lowerText = text.toLowerCase();
+            
+            for (let char of lowerText) {
+                const ascii = asciiMap[char] || ['  ?   ', '  ?   ', '  ?   '];
+                lines[0] += ascii[0];
+                lines[1] += ascii[1];
+                lines[2] += ascii[2];
+            }
+            
+            return `<span style="color: #22c55e; white-space: pre; display: block;">${lines[0]}\n${lines[1]}\n${lines[2]}</span>`;
         }
 
         function createNavTabs() {
@@ -408,19 +780,12 @@
             tabs.forEach(tab => {
                 const button = document.createElement('button');
                 button.className = 'tab';
-                button.innerHTML = `<span>${tab.emoji}</span> ${tab.label}`;
+                button.textContent = tab.label;
                 button.onclick = () => openWindow(tab.id);
                 navTabs.appendChild(button);
             });
             
             document.getElementById('app').appendChild(navTabs);
-        }
-
-        function createMascot() {
-            const mascot = document.createElement('div');
-            mascot.className = 'mascot';
-            mascot.textContent = '🐸';
-            document.getElementById('app').appendChild(mascot);
         }
 
         function openWindow(type) {
@@ -431,10 +796,12 @@
                 return;
             }
 
+            const tab = tabs.find(t => t.id === type);
             const windowData = {
                 id: nextId,
                 type: type,
-                title: type,
+                title: tab.title,
+                theme: tab.theme,
                 zIndex: maxZIndex + 1,
                 x: 150 + (nextId * 40),
                 y: 100 + (nextId * 40)
@@ -457,13 +824,19 @@
             windowEl.style.zIndex = windowData.zIndex;
 
             windowEl.innerHTML = `
-                <div class="window-header" data-window-id="${windowData.id}">
+                <div class="window-header theme-${windowData.theme}" data-window-id="${windowData.id}">
+                    <div class="terminal-buttons">
+                        <span class="terminal-window-button red" onclick="closeWindow(${windowData.id})"></span>
+                        <span class="terminal-window-button yellow"></span>
+                        <span class="terminal-window-button green"></span>
+                    </div>
                     <span class="window-title">${windowData.title}</span>
-                    <button class="close-btn" onclick="closeWindow(${windowData.id})">×</button>
+                    <span class="window-close-btn"></span>
                 </div>
                 <div class="window-content">
                     ${content[windowData.type]}
                 </div>
+                <div class="window-resize-handle"></div>
             `;
 
             document.getElementById('app').appendChild(windowEl);
@@ -472,6 +845,10 @@
             const header = windowEl.querySelector('.window-header');
             header.addEventListener('mousedown', startDrag);
             windowEl.addEventListener('mousedown', () => focusWindow(windowData.id));
+            
+            // Add resize listener
+            const resizeHandle = windowEl.querySelector('.window-resize-handle');
+            resizeHandle.addEventListener('mousedown', startResize);
         }
 
         function closeWindow(id) {
@@ -496,19 +873,17 @@
         }
 
         function updateTitleCardVisibility() {
+            // Keep title card always visible
             const titleCard = document.getElementById('titleCard');
             if (titleCard) {
-                if (windows.length === 0) {
-                    titleCard.classList.remove('hidden');
-                } else {
-                    titleCard.classList.add('hidden');
-                }
+                titleCard.classList.remove('hidden');
             }
         }
 
         function startDrag(e) {
-            // Don't drag if clicking on close button
-            if (e.target.classList.contains('close-btn') || e.target.closest('.close-btn')) {
+            // Don't drag if clicking on terminal buttons
+            if (e.target.classList.contains('terminal-window-button') || 
+                e.target.closest('.terminal-buttons')) {
                 return;
             }
 
@@ -556,11 +931,52 @@
             document.removeEventListener('mouseup', stopDrag);
         }
 
+        // Window resizing
+        let resizingWindow = null;
+
+        function startResize(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            const windowEl = e.target.closest('.window');
+            const windowId = parseInt(windowEl.id.split('-')[1]);
+            const rect = windowEl.getBoundingClientRect();
+            
+            resizingWindow = {
+                element: windowEl,
+                startX: e.clientX,
+                startY: e.clientY,
+                startWidth: rect.width,
+                startHeight: rect.height
+            };
+            
+            document.addEventListener('mousemove', resize);
+            document.addEventListener('mouseup', stopResize);
+        }
+
+        function resize(e) {
+            if (!resizingWindow) return;
+            
+            const deltaX = e.clientX - resizingWindow.startX;
+            const deltaY = e.clientY - resizingWindow.startY;
+            
+            const newWidth = Math.max(400, resizingWindow.startWidth + deltaX);
+            const newHeight = Math.max(300, resizingWindow.startHeight + deltaY);
+            
+            resizingWindow.element.style.width = newWidth + 'px';
+            resizingWindow.element.style.height = newHeight + 'px';
+        }
+
+        function stopResize() {
+            resizingWindow = null;
+            document.removeEventListener('mousemove', resize);
+            document.removeEventListener('mouseup', stopResize);
+        }
+
         // Initialize
-        createStars();
+        loadTheme();
         createTitleCard();
         createNavTabs();
-        createMascot();
     </script>
 </body>
 </html>
