@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .portfolio {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(162, 155, 254, 0.3), transparent 50%),
+                linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .mascot {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            z-index: 1;
+        }
+
+        .title-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 1;
+            transition: opacity 0.3s;
+        }
+
+        .title-card.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .title-card h1 {
+            font-size: 72px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+
+        .title-card p {
+            font-size: 18px;
+            opacity: 0.9;
+            text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-tabs {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10000;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tab {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .window {
+            position: absolute;
+            background: rgba(30, 30, 30, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            width: 500px;
+            max-height: 600px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .window-header {
+            background: rgba(50, 50, 50, 0.9);
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            user-select: none;
+            cursor: grab;
+        }
+
+        .window-header.dragging {
+            cursor: grabbing;
+        }
+
+        .window-title {
+            color: #22c55e;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .window-title::before {
+            content: '> ';
+            color: #22c55e;
+        }
+
+        .close-btn {
+            background: rgba(239, 68, 68, 0.8);
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.2s;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            background: rgba(239, 68, 68, 1);
+            transform: scale(1.1);
+        }
+
+        .window-content {
+            padding: 25px;
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.8;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .window-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .window-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .window-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .terminal-text {
+            font-family: 'Courier New', monospace;
+        }
+
+        .prompt {
+            color: #22c55e;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .terminal-text a {
+            color: #60a5fa;
+            text-decoration: none;
+            border-bottom: 1px dotted #60a5fa;
+            transition: all 0.2s;
+        }
+
+        .terminal-text a:hover {
+            color: #93c5fd;
+            border-bottom: 1px solid #93c5fd;
+        }
+
+        .note {
+            color: #9ca3af;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .project {
+            padding-left: 10px;
+            border-left: 2px solid #22c55e;
+            margin-bottom: 15px;
+        }
+
+        .project-title {
+            color: #fbbf24;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .tech {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .question {
+            color: #fbbf24;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .email-btn {
+            background: #22c55e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: black;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .email-btn:hover {
+            background: #16a34a;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="portfolio"></div>
+
+    <script>
+        // Content for each window
+        const content = {
+            about: `
+                <div class="terminal-text">
+                    <p class="prompt">$ whoami</p>
+                    <p>Hi! I'm [Your Name] 👋</p>
+                    <br>
+                    <p>I'm a [Your Title/Role]</p>
+                    <br>
+                    <p class="prompt">$ cat background.txt</p>
+                    <p>• Computer Science graduate</p>
+                    <p>• Passionate about web development and design</p>
+                    <p>• Love creating interactive experiences</p>
+                    <br>
+                    <p class="prompt">$ ls languages/</p>
+                    <p>English, Spanish, [Your Languages]</p>
+                </div>
+            `,
+            links: `
+                <div class="terminal-text">
+                    <p class="prompt">$ cat links.txt</p>
+                    <br>
+                    <p>→ <a href="https://github.com/yourusername" target="_blank">GitHub</a></p>
+                    <p>→ <a href="https://twitter.com/yourusername" target="_blank">Twitter</a></p>
+                    <p>→ <a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a></p>
+                    <p>→ <a href="https://yourportfolio.com" target="_blank">Portfolio</a></p>
+                    <br>
+                    <p class="note">* clicking any link will open a new tab!</p>
+                </div>
+            `,
+            work: `
+                <div class="terminal-text">
+                    <p class="prompt">$ ls -la projects/</p>
+                    <br>
+                    <div class="project">
+                        <p class="project-title">🎮 Cool Game Project</p>
+                        <p>A fun RPG game made with Unity</p>
+                        <p class="tech">Tech: C#, Unity, Photoshop</p>
+                    </div>
+                    <div class="project">
+                        <p class="project-title">🌐 Web Application</p>
+                        <p>Full-stack web app for productivity</p>
+                        <p class="tech">Tech: React, Node.js, MongoDB</p>
+                    </div>
+                    <div class="project">
+                        <p class="project-title">🎨 Design Portfolio</p>
+                        <p>Collection of UI/UX designs and illustrations</p>
+                        <p class="tech">Tools: Figma, Procreate, Adobe Suite</p>
+                    </div>
+                </div>
+            `,
+            faq: `
+                <div class="terminal-text">
+                    <p class="prompt">$ cat faq.txt</p>
+                    <br>
+                    <p class="question">Q: What do you do?</p>
+                    <p>A: I'm a developer and designer who loves creating interactive web experiences.</p>
+                    <br>
+                    <p class="question">Q: What technologies do you use?</p>
+                    <p>A: React, JavaScript, Python, Node.js, and always learning more!</p>
+                    <br>
+                    <p class="question">Q: Are you available for work?</p>
+                    <p>A: Yes! Feel free to reach out via the contact tab.</p>
+                    <br>
+                    <p class="question">Q: How did you make this site?</p>
+                    <p>A: With vanilla JavaScript and a lot of CSS! The windows are draggable divs.</p>
+                </div>
+            `,
+            contact: `
+                <div class="terminal-text">
+                    <p class="prompt">$ cat contact.txt</p>
+                    <br>
+                    <p>The easiest way to reach me is through email!</p>
+                    <br>
+                    <p>📧 Email: <a href="mailto:your.email@example.com">your.email@example.com</a></p>
+                    <br>
+                    <button class="email-btn" onclick="window.location.href='mailto:your.email@example.com'">
+                        Open Mail App
+                    </button>
+                    <br><br>
+                    <p class="note">I don't check social media DMs often,</p>
+                    <p class="note">so email is your best bet! 👍</p>
+                </div>
+            `
+        };
+
+        // State
+        let windows = [];
+        let nextId = 1;
+        let maxZIndex = 100;
+        let draggedWindow = null;
+        let dragOffset = { x: 0, y: 0 };
+
+        const tabs = [
+            { id: 'about', label: 'about', emoji: '👋' },
+            { id: 'links', label: 'links', emoji: '🔗' },
+            { id: 'work', label: 'work', emoji: '💼' },
+            { id: 'faq', label: 'faq', emoji: '❓' },
+            { id: 'contact', label: 'contact', emoji: '📧' },
+        ];
+
+        function createStars() {
+            const app = document.getElementById('app');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                app.appendChild(star);
+            }
+        }
+
+        function createTitleCard() {
+            const titleCard = document.createElement('div');
+            titleCard.className = 'title-card';
+            titleCard.id = 'titleCard';
+            titleCard.innerHTML = `
+                <h1>hi! i'm [name]</h1>
+                <p>developer, designer, creator</p>
+            `;
+            document.getElementById('app').appendChild(titleCard);
+        }
+
+        function createNavTabs() {
+            const navTabs = document.createElement('div');
+            navTabs.className = 'nav-tabs';
+            
+            tabs.forEach(tab => {
+                const button = document.createElement('button');
+                button.className = 'tab';
+                button.innerHTML = `<span>${tab.emoji}</span> ${tab.label}`;
+                button.onclick = () => openWindow(tab.id);
+                navTabs.appendChild(button);
+            });
+            
+            document.getElementById('app').appendChild(navTabs);
+        }
+
+        function createMascot() {
+            const mascot = document.createElement('div');
+            mascot.className = 'mascot';
+            mascot.textContent = '🐸';
+            document.getElementById('app').appendChild(mascot);
+        }
+
+        function openWindow(type) {
+            // Check if window already exists
+            if (windows.some(w => w.type === type)) {
+                const existingWindow = windows.find(w => w.type === type);
+                focusWindow(existingWindow.id);
+                return;
+            }
+
+            const windowData = {
+                id: nextId,
+                type: type,
+                title: type,
+                zIndex: maxZIndex + 1,
+                x: 150 + (nextId * 40),
+                y: 100 + (nextId * 40)
+            };
+
+            windows.push(windowData);
+            nextId++;
+            maxZIndex++;
+
+            renderWindow(windowData);
+            updateTitleCardVisibility();
+        }
+
+        function renderWindow(windowData) {
+            const windowEl = document.createElement('div');
+            windowEl.className = 'window';
+            windowEl.id = `window-${windowData.id}`;
+            windowEl.style.left = windowData.x + 'px';
+            windowEl.style.top = windowData.y + 'px';
+            windowEl.style.zIndex = windowData.zIndex;
+
+            windowEl.innerHTML = `
+                <div class="window-header" data-window-id="${windowData.id}">
+                    <span class="window-title">${windowData.title}</span>
+                    <button class="close-btn" onclick="closeWindow(${windowData.id})">×</button>
+                </div>
+                <div class="window-content">
+                    ${content[windowData.type]}
+                </div>
+            `;
+
+            document.getElementById('app').appendChild(windowEl);
+
+            // Add drag listeners
+            const header = windowEl.querySelector('.window-header');
+            header.addEventListener('mousedown', startDrag);
+            windowEl.addEventListener('mousedown', () => focusWindow(windowData.id));
+        }
+
+        function closeWindow(id) {
+            const windowEl = document.getElementById(`window-${id}`);
+            if (windowEl) {
+                windowEl.remove();
+            }
+            windows = windows.filter(w => w.id !== id);
+            updateTitleCardVisibility();
+        }
+
+        function focusWindow(id) {
+            const window = windows.find(w => w.id === id);
+            if (window) {
+                maxZIndex++;
+                window.zIndex = maxZIndex;
+                const windowEl = document.getElementById(`window-${id}`);
+                if (windowEl) {
+                    windowEl.style.zIndex = maxZIndex;
+                }
+            }
+        }
+
+        function updateTitleCardVisibility() {
+            const titleCard = document.getElementById('titleCard');
+            if (titleCard) {
+                if (windows.length === 0) {
+                    titleCard.classList.remove('hidden');
+                } else {
+                    titleCard.classList.add('hidden');
+                }
+            }
+        }
+
+        function startDrag(e) {
+            const windowId = parseInt(e.currentTarget.dataset.windowId);
+            const windowEl = document.getElementById(`window-${windowId}`);
+            const rect = windowEl.getBoundingClientRect();
+            
+            draggedWindow = {
+                id: windowId,
+                element: windowEl,
+                offsetX: e.clientX - rect.left,
+                offsetY: e.clientY - rect.top
+            };
+
+            e.currentTarget.classList.add('dragging');
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDrag);
+        }
+
+        function drag(e) {
+            if (!draggedWindow) return;
+
+            const newX = Math.max(0, Math.min(e.clientX - draggedWindow.offsetX, window.innerWidth - 500));
+            const newY = Math.max(0, Math.min(e.clientY - draggedWindow.offsetY, window.innerHeight - 300));
+
+            draggedWindow.element.style.left = newX + 'px';
+            draggedWindow.element.style.top = newY + 'px';
+
+            const window = windows.find(w => w.id === draggedWindow.id);
+            if (window) {
+                window.x = newX;
+                window.y = newY;
+            }
+        }
+
+        function stopDrag(e) {
+            if (draggedWindow) {
+                const header = draggedWindow.element.querySelector('.window-header');
+                header.classList.remove('dragging');
+                draggedWindow = null;
+            }
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', stopDrag);
+        }
+
+        // Initialize
+        createStars();
+        createTitleCard();
+        createNavTabs();
+        createMascot();
+    </script>
+</body>
+</html>
